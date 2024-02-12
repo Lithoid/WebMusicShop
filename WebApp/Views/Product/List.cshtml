@@ -1,0 +1,75 @@
+﻿@model IEnumerable<BL.ProductViewModel>
+
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Product list</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-dark">Create New</a>
+</p>
+
+<form asp-action="List" method="post">
+    @Html.ValidationSummary(false)
+    <div class="form-group row">
+        <div class="col-xs-2">
+            @Html.Editor("name", new { htmlAttributes = new { @class = "form-control", @id = "name" } })
+        </div>
+        <div class="col-xs-2">
+            <input class="btn btn-dark" type="submit" value="Search" />
+        </div>
+    </div>
+</form>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                 @Html.ActionLink("Name", "List", new { sortOrder = ViewBag.NameSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Category", "List", new { sortOrder = ViewBag.CategorySortParm })
+            </th>
+            <th>
+                @Html.ActionLink("RetailPrice", "List", new { sortOrder = ViewBag.PriceSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Brand", "List", new { sortOrder = ViewBag.PriceSortParm })
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RetailPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BrandName)
+                </td>
+                @*<td>
+            @Html.DisplayFor(modelItem => item.ImageId)
+            </td>*@
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-dark">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-dark">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

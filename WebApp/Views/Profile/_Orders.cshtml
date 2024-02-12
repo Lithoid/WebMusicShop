@@ -1,0 +1,104 @@
+﻿@using BL;
+
+
+
+@model IEnumerable<OrderViewModel>
+
+<div class="card h-100">
+    <div class="card-header">
+        Your orders
+    </div>
+
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            @foreach (var item in Model)
+            {
+                <li class="list-group-item">
+                    <div class="row ">
+
+                        <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
+                            <p class="font-weight-bold mb-0">@item.Id</p>
+                        </div>
+                        <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
+                            <p class="text-muted mb-0 ">@item.OrderDate</p>
+                        </div>
+                        @if (item.StatusName == "Sended")
+                        {
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                <p class="text-success mb-0 ">@item.StatusName</p>
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                <a class="btn btn-success mb-0" asp-action="Details" asp-controller="Order"
+                           asp-route-orderId="@item.Id">Details</a>
+                            </div>
+                        }
+                        @if (item.StatusName == "Canceled")
+                        {
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                <p class="text-danger mb-0 ">@item.StatusName</p>
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                <a class="btn btn-danger mb-0" asp-action="Details" asp-controller="Order"
+                           asp-route-orderId="@item.Id">Details</a>
+                            </div>
+                        }
+                        @if (item.StatusName == "Pending")
+                        {
+
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+
+                                <p class="text-warning mb-0 ">@item.StatusName</p>
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                <a class="btn btn-warning mb-0" asp-action="Checkout" asp-controller="Order"
+                           asp-route-orderId="@item.Id">Pay</a>
+                            </div>
+                        }
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                            <p class="text-muted mb-0 ">@item.TotalSumm$</p>
+                        </div>
+
+
+
+
+
+
+
+                    </div>
+                </li>
+            }
+
+
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+<style>
+    .rounded-circle {
+        border-radius: 50% !important;
+    }
+
+    .card {
+        box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+    }
+
+        .card .card-header {
+            font-weight: 500;
+        }
+
+    .card-header:first-child {
+        border-radius: 0.35rem 0.35rem 0 0;
+    }
+
+    .card-header {
+        padding: 1rem 1.35rem;
+        margin-bottom: 0;
+        background-color: rgba(33, 40, 50, 0.03);
+        border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+    }
+
+</style>

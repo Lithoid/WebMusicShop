@@ -1,0 +1,133 @@
+﻿@model UserViewModel
+
+
+
+<div class="card mb-2 h-100">
+    <div class="card-header">Account Details</div>
+    <div class="card-body">
+        <form id="formData">
+            <!-- Form Group (username)-->
+            <div class="mb-3">
+                <label class="small mb-1" asp-for="UserName"></label>
+                <input  class="form-control" asp-for="UserName" value="@Model.UserName">
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <!-- Form Group (email address)-->
+            <div class="mb-3">
+                <label class="small mb-1" asp-for="Email">Email address</label>
+                <input readonly class="form-control" asp-for="Email" placeholder="Enter your email address" value="@Model.Email">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="small mb-1" asp-for="FullName">Full name</label>
+                <input  class="form-control" asp-for="FullName" placeholder="Enter your name" value="@Model.FullName">
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <!-- Form Row-->
+            <div class="row gx-3 mb-3">
+                <!-- Form Group (phone number)-->
+                <div class="col-md-6">
+                    <label class="small mb-1" asp-for="PhoneNumber"></label>
+                    <input class="form-control" asp-for="PhoneNumber" value="@Model.PhoneNumber">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>  
+                </div>
+                <!-- Form Group (birthday)-->
+                <div class="col-md-6">
+                    <label class="small mb-1" asp-for="RegisterDate"></label>
+                    <input class="form-control" asp-for="RegisterDate" value="@Model.RegisterDate">
+                    <span asp-validation-for="RegisterDate" class="text-danger"></span>
+                </div>
+            </div>
+            <!-- Save changes button-->
+            <button class="btn btn-primary" onclick="submitChanges()" type="button">Save changes</button>
+        </form>
+    </div>
+    <div class="card-header">Last Order Details</div>
+    @if (@Model.LastOrder==null)
+    {
+        <div class="card-title">You have not ordered anything yet</div>
+    }else{
+
+        <div class="card-body">
+            <div class="row gx-3 mb-3">
+                <div class="col-md-2">
+                    <div class="text-muted font-weight-bolder">City:</div>
+                </div>
+                <div class="col-md-2">
+                    <div class="">@Model.LastOrder.City</div>
+                </div>
+            </div>
+            <div class="row gx-3 mb-3">
+                <div class="col-md-2">
+                    <div class="text-muted font-weight-bolder">Date:</div>
+                </div>
+                <div class="col-md-2">
+                    <div class="">@Model.LastOrder.OrderDate.ToString("MM/dd/yyyy")</div>
+                </div>
+            </div>
+            <div class="row gx-3 mb-3">
+                <div class="col-md-2">
+                    <div class="text-muted font-weight-bolder">Phone:</div>
+                </div>
+                <div class="col-md-2">
+                    <div class="">@Model.LastOrder.ClientPhone</div>
+                </div>
+            </div>
+            <div class="row gx-3 mb-3">
+                <div class="col-md-2">
+                    <div class="text-muted font-weight-bolder">Name:</div>
+                </div>
+                <div class="col-md-2">
+                    <div class="">@Model.LastOrder.ClientName</div>
+                </div>
+            </div>
+
+        </div>
+    }
+    
+</div>
+
+
+<style>
+    .rounded-circle {
+        border-radius: 50% !important;
+    }
+
+    .card {
+        box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+    }
+
+        .card .card-header {
+            font-weight: 500;
+        }
+
+    .card-header:first-child {
+        border-radius: 0.35rem 0.35rem 0 0;
+    }
+
+    .card-header {
+        padding: 1rem 1.35rem;
+        margin-bottom: 0;
+        background-color: rgba(33, 40, 50, 0.03);
+        border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+    }
+
+    .form-control, .dataTable-input {
+        display: block;
+        width: 100%;
+        padding: 0.875rem 1.125rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1;
+        color: #69707a;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #c5ccd6;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 0.35rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+</style>

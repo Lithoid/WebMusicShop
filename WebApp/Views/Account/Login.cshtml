@@ -1,0 +1,90 @@
+﻿@using Entities;
+@using Microsoft.AspNetCore.Identity;
+@using WebApp.Models.Auth;
+
+@model LoginViewModel
+@inject SignInManager<AppUser> signInManager
+
+<div class="row d-flex justify-content-center align-items-center h-100 mt-4">
+    <div class="col-lg-6 col-xl-6">
+        <div class="card text-black" style="border-radius: 25px;">
+            <div class="card-body p-md-5">
+                <div class="row justify-content-center">
+                    <div class="col-sm order-2 order-lg-1">
+
+                        <partial>
+                        <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
+
+                        <form method="post" asp-action="LoginConfirm" class="mx-1 mx-md-4">
+                            <div class="form-group">
+                            </div>
+                            <div class="d-flex flex-row align-items-center mb-4">
+                                <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                <div class="form-outline flex-fill mb-0">
+                                    <label asp-for="Login"></label>
+                                        <input asp-for="Login" class="form-control" />
+                                        <span asp-validation-for="Login" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-row align-items-center mb-4">
+                                <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                <div class="form-outline flex-fill mb-0">
+                                    <label asp-for="Password"></label>
+                                    <input asp-for="Password" class="form-control" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row align-items-center mb-4">
+                                <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                <div class="form-outline flex-fill mb-0">
+                                    <div class="checkbox">
+                                        <label asp-for="RememberMe">
+                                            <input asp-for="RememberMe" />
+                                            @Html.DisplayNameFor(m => m.RememberMe)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                            </div>
+
+                            <p><a asp-action="ForgotPassword">Forgot your password?</a></p>
+                            <p> <a asp-action="Register">Dont have an account? Sign up</a></p>
+
+                        </form>
+                        @{
+                            var schemes = await signInManager.GetExternalAuthenticationSchemesAsync();
+                            var loginProviders = schemes.ToList();
+                        }
+                        @if (loginProviders.Count() > 0)
+                        {
+                            <div>
+                                <section>
+                                    <h4>User services to log in</h4>
+                                    <form asp-controller="Account" asp-action="ExternalLogin" method="post" role="form">
+                                        <div>
+                                            <p>
+                                                @foreach (var provider in loginProviders)
+                                                {
+                                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name"
+                                                    title="Log in with your @provider.Name account">
+                                                        @provider.Name
+                                                    </button>
+                                                }
+                                            </p>
+                                        </div>
+                                    </form>
+                                </section>
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

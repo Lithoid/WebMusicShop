@@ -1,0 +1,94 @@
+﻿@model MiscDataViewModel
+
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Category and brands list</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <p>
+            <form asp-action="CreateCategory" method="post">
+                @Html.ValidationSummary(false)
+                <div class="text-danger"></div>
+                <div class="form-group row">
+                    <div class="col-xs-2">
+                        <label class="control-label"></label>
+                        @Html.Editor("name", new { htmlAttributes = new { @class = "form-control", @id = "name" } })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <input class="btn btn-dark" type="submit" value="Add" />
+            </form>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Categories.First().Name)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Categories)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <p>
+            <form asp-action="CreateBrand" method="post">
+                @Html.ValidationSummary(false)
+                <div class="text-danger"></div>
+                <div class="form-group row">
+                    <div class="col-xs-2">
+                        <label class="control-label"></label>
+                        @Html.Editor("name", new { htmlAttributes = new { @class = "form-control", @id = "name" } })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <input class="btn btn-dark" type="submit" value="Add" />
+            </form>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Brands.First().Name)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Brands)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+

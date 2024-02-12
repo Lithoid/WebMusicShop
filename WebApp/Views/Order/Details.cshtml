@@ -1,0 +1,59 @@
+﻿@model CartOrderViewModel
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <p>User details</p>
+            <form>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label class="control-label">@Model.Order.ClientName</label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">@Model.Order.ClientPhone</label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">@Model.Order.Email</label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">@Model.Order.City</label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">@Model.Order.NovaPoshta</label>
+                </div>
+
+                <a asp-action="Profile" asp-controller="Profile">Back to profile</a>
+
+            </form>
+        </div>
+        <div class="col-md-4 order-md-2 mb-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">Your cart</span>
+                <span class="badge badge-secondary badge-pill">@Model.CartItems.Count()</span>
+            </h4>
+            <ul class="list-group mb-3">
+
+                @foreach (var item in Model.CartItems)
+                {
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <h6 class="my-0">@item.ProductName</h6>
+                            <small style="overflow:hidden;" class="text-muted">@item.ProductAbout</small>
+                        </div>
+                        <span class="text-muted">$@item.Price</span>
+                    </li>
+                }
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Total (USD)</span>
+                    <strong>@Model.Order.TotalSumm</strong>
+                </li>
+            </ul>
+
+
+        </div>
+
+
+    </div>
+</div>

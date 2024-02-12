@@ -1,0 +1,71 @@
+﻿@model IEnumerable<BL.CartViewModel>
+
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Cart</h1>
+<form asp-controller="Order" asp-action="MakeOrder" asp-route-cartId="@Model.First().CartId" >
+    <div class="container padding-bottom-3x mb-1">
+        <!-- Shopping Cart-->
+        <div class="table-responsive shopping-cart">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Product Name</th>
+                        <th class="text-center">@Html.DisplayNameFor(model => model.Quantity)</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center"><a class="btn btn-sm btn-outline-danger" asp-action="DeleteAll">Clear Cart</a>
+                            <a class="btn btn-sm btn-outline-success" asp-controller="Shop" asp-action="List">Back to shop</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+        <tr>
+            <td>
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4 class="product-title"><a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId">@item.ProductName</a></h4>
+                    </div>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="count-input">
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+            </td>
+            <td class="text-center text-lg text-medium">@item.Price.ToString("# $")</td>
+            <td class="text-center">
+                <a asp-action="Delete" asp-route-id="@item.Id" Delete class="remove-from-cart" data-toggle="tooltip" title="" data-original-title="Remove item">Delete<i class="fa fa-trash"></i></a>
+            </td>
+        </tr>
+}
+                </tbody>
+            </table>
+        </div>
+        <div class="shopping-cart-footer">
+            <div class="column text-lg">Subtotal:@ViewBag.Subtotal.ToString("# $") <span id="total" class="text-medium"></span></div>
+        </div>
+        <div class="shopping-cart-footer">
+            <div class="row">
+                 <div class="col"><input type="submit" class="btn btn-success" value="Continue"></div>
+                 
+
+            </div>
+           
+        </div>
+    </div>
+</form>
+
+<script>
+
+
+</script>

@@ -1,0 +1,169 @@
+﻿@using WebApp.Models.Auth;
+
+
+@model ProfileViewModel
+
+<div class="container">
+
+    <div class="card mt-4 mb-2">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6 ">
+                    @Model.User.UserName
+                </div>
+                <div class="col-6 ">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Reviews @Model.ReviewCount</li>
+                        <li class="list-group-item">Orders @Model.Orders.Count()</li>
+                        <li class="list-group-item">Favourite 0</li>
+                    </ul>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-2 pl-3 pr-0">
+            <div class="card">
+                <div class="card-body">
+                    <div class="list-group-flush">
+                        <button type="button" onclick="accDetails()" class="list-group-item list-group-item-action">Account details</button>
+                        <button type="button" onclick="allOrders()" class="list-group-item list-group-item-action">Orders</button>
+                        <button type="button" onclick="favourites()" class="list-group-item list-group-item-action">Favourites</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-10  pl-2">
+
+            <div id="result">
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+<style>
+    .card {
+        box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+    }
+
+        .card .card-header {
+            font-weight: 500;
+        }
+
+    .card-header:first-child {
+        border-radius: 0.35rem 0.35rem 0 0;
+    }
+
+    .card-header {
+        padding: 1rem 1.35rem;
+        margin-bottom: 0;
+        background-color: rgba(33, 40, 50, 0.03);
+        border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+    }
+</style>
+
+@section Scripts{
+    <script>
+
+        $.ajax({
+            url: '/Profile/Details',
+            type: 'GET',
+            success: function (result) {
+                console.log(result);
+                $("#result").html(result);
+            },
+            error: function (xhr, exception) {
+                console.log(exception);
+            }
+        });
+
+        accDetails = () => {
+            $.ajax({
+                url: '/Profile/Details',
+                type: 'GET',
+                success: function (result) {
+                    console.log(result);
+                    $("#result").html(result);
+                },
+                error: function (xhr, exception) {
+                    console.log(exception);
+                }
+            });
+        }
+
+        allOrders = () => {
+            $.ajax({
+                url: '/Profile/Orders',
+                type: 'GET',
+                success: function (result) {
+                    console.log(result);
+                    $("#result").html(result);
+                },
+                error: function (xhr, exception) {
+                    console.log(exception);
+                }
+            });
+        }
+
+        favourites = () => {
+            $.ajax({
+                url: '/Profile/Favourites',
+                type: 'GET',
+                success: function (result) {
+                    console.log(result);
+                    $("#result").html(result);
+                },
+                error: function (xhr, exception) {
+                    console.log(exception);
+                }
+            });
+        }
+
+        removeFavourite = (id) => {
+            $.ajax({
+                url: '/Profile/RemoveFromFavourite',
+                type: 'GET',
+                data:{
+                    prodId:id
+                },
+                success: function (result) {
+                    console.log(result);
+                    $("#result").html(result);
+                },
+                error: function (xhr, exception) {
+                    console.log(exception);
+                }
+            });
+        }
+
+        submitChanges = () => {
+            var valdata = $("#formData").serialize();
+            console.log(valdata)
+            $.ajax({
+                url: '/Profile/EditProfile',
+                type: 'POST',
+                datatype:"json",
+                data:valdata,
+                success: function (result) {
+                    console.log(result);
+                    $("#result").html(result);
+                },
+                error: function (xhr, exception) {
+                    console.log(exception);
+                }
+            });
+        }
+
+    </script>
+
+}
+

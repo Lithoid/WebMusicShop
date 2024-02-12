@@ -1,0 +1,222 @@
+﻿@model IndexViewModel
+@using BL;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = "List";
+
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+
+    <div class="row">
+        <div class="col-12">
+            <h1>@ViewData["CategoryName"]</h1>
+
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mb-1" role="group" aria-label="First group">
+                    <a type="button" asp-action="List" class="btn btn-secondary ml-1">All</a>
+                </div>
+                @foreach (CategoryViewModel category in Model.Categories)
+                {
+                    <div class="btn-group mb-1" role="group" aria-label="First group">
+                        <a type="button" asp-action="List" asp-route-categoryId="@category.Id" class="btn btn-secondary ml-1">@category.Name</a>
+                    </div>
+
+                }
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+
+        <div class="col-md-3">
+            <form id="sortData">
+                <div class="card">
+                    <article class="card-group-item">
+                        <header class="card-header">
+                            <h6 class="title">@Localizer["Sorting"] </h6>
+                        </header>
+                        <div class="card-body">
+                            Sorting
+                            <select class="custom-select mb-1" name="order" aria-label="Default select example">
+                                <option value="priceAsc">@Localizer["Cheap"]</option>
+                                <option value="priceDesc">@Localizer["Expensive"]</option>
+                                <option value="rateDesc">@Localizer["Rate"]</option>
+                            </select>
+                        </div>
+                    </article>
+                    <article class="card-group-item">
+                        <header class="card-header">
+                            <h6 class="title">@Localizer["Range"] </h6>
+                        </header>
+                        <div class="filter-content">
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>@Localizer["Min"]</label>
+                                        <input type="number" value="0" name="min" class="form-control" id="inputEmail4" placeholder="0">
+                                    </div>
+                                    <div class="form-group col-md-6 text-right">
+                                        <label>@Localizer["Max"]</label>
+                                        <input type="number" value="1000" name="max" class="form-control" placeholder="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="card-group-item">
+                        <header class="card-header">
+                            <h6 class="title">@Localizer["Selection"] </h6>
+                        </header>
+                        <div class="filter-content">
+                            <div class="card-body">
+                                @foreach (var brand in Model.Brands)
+                                {
+
+                                    <div class="custom-control custom-checkbox">
+                                        <span class="float-right badge badge-light round">@brand.ProductCount</span>
+                                        <input type="checkbox" name="selectedBrands" value="@brand.Name" class="custom-control-input" id="@brand.Id">
+                                        <label class="custom-control-label" for="@brand.Id">@brand.Name</label>
+                                    </div>
+                                }
+
+
+
+                            </div>
+                        </div>
+                    </article>
+                    <input class="btn-dark" type="button" onclick="generateList(`@ViewData["Category"]`)" value="@Localizer["Submit"]" />
+                </div>
+            </form>
+        </div>
+        <div class="col-md-9" id="partialList">
+        </div>
+    </div>
+    <partial name="_SupportChat" />
+</div>
+
+
+
+
+
+<style>
+    img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    ul.hr {
+        margin: 0;
+        padding: 0px;
+    }
+
+        ul.hr li {
+            display: inline-block;
+        }
+</style>
+
+
+@section Scripts{
+    <script>
+        generateList = (categoryId, page = 0) => {
+            var formData = $("#sortData").serialize() + '&' + $.param({ 'categoryId': categoryId })
+                + '&' + $.param({ 'page': page });
+            console.log(formData)
+            $.ajax({
+                url: '/Shop/PartialList',
+                type: 'POST',
+                datatype: "json",
+                data: formData,
+                success: function (result) {
+                    $("#partialList").html(result);
+                },
+                error: function (xhr, exception) {
+                    console.log(exception);
+                }
+            });
+        }
+        $(document).ready(generateList(`@ViewData["Category"]`))
+        addToFavourite = (prodId) => {
+            $.ajax({
+                url: '/Shop/AddToFavourite',
+                type: 'GET',
+                data: {
+                    prodId: prodId
+                },
+                success: function (result) {
+                    $("#result").html(result);
+                    Swal.fire(result)
+                },
+                error: function (xhr, exception) {
+                    console.log(exception);
+                }
+            });
+
+        }
+        addToCart = (prodId) => {
+            $.ajax({
+                url: '/CartItem/Add',
+                type: 'GET',
+                data: {
+                    id: prodId
+                },
+                success: function (result) {
+                    $("#result").html(result);
+                    Swal.fire('Added to cart')
+                },
+                error: function (xhr, exception) {
+                    console.log(exception);
+                }
+            });
+
+        }
+
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/supportHub").build();
+
+        connection.on("ReceiveMessage", function (user, message) {
+            
+            var div = document.createElement("div");
+            document.getElementById("messagesList").appendChild(div);
+            div.innerHTML = `<div class="p-3 ms-3" id="messageFrom" style="border-radius: 15px; background-color: rgba(57, 192, 237,.2);">
+                                  <p class="small mb-0">
+                                             <h6 class="mb-1">${user}</h6>${message}
+                                  </p>
+                                 </div>`;
+        });
+
+        connection.start().then(function () {
+            document.getElementById("sendButton").disabled = false;
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+
+        document.getElementById("sendButton").addEventListener("click", function (event) {
+            console.log(123)
+            var user = `@User.Identity.Name`;
+            var message = document.getElementById("messageInput").value;
+            var div = document.createElement("div");
+            document.getElementById("messagesList").appendChild(div);
+            div.innerHTML = `<div class="p-3 ms-3" id="messageFrom" style="border-radius: 15px; background-color: lightgray;">
+                                  <p class="small mb-0">
+                                             <h6 class="mb-1">${user}</h6>${message}
+                                  </p>
+                                 </div>`;
+            connection.invoke("SendMessage", user, message).catch(function (err) {
+                return console.error(err.toString());
+            });
+            event.preventDefault();
+        });
+
+
+
+
+    </script>
+
+}
